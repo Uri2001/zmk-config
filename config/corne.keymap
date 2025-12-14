@@ -1,7 +1,7 @@
 /*
  * Minimal Corne 6x3+3 keymap for ZMK
  * Layers: BASE / LOWER / RAISE / ADJUST (tri-layer via conditional layers)
- * RU/EN переключение — на уровне ОС (Alt+Shift), вызываем макросом через комбо J+K.
+ * RU/EN переключение — на уровне ОС (Alt+Shift) через комбо J+K.
  */
 
 #include <behaviors.dtsi>
@@ -14,7 +14,7 @@
 #define ADJUST 3
 
 / {
-  /* ----- MACROS ----- */
+  /* ----- MACROS (root-level) ----- */
   macros {
     lang_toggle: lang_toggle {
       compatible = "zmk,behavior-macro";
@@ -29,14 +29,45 @@
     };
   };
 
+  /* ----- COMBOS (root-level, separate from keymap) ----- */
+  combos {
+    compatible = "zmk,combos";
+
+    combo_esc_qw {
+      timeout-ms = <40>;
+      key-positions = <1 2>;      /* Q + W */
+      bindings = <&kp ESC>;
+    };
+
+    combo_caps_word_as {
+      timeout-ms = <40>;
+      key-positions = <13 14>;    /* A + S */
+      bindings = <&caps_word>;
+    };
+
+    combo_lang_jk {
+      timeout-ms = <45>;
+      key-positions = <19 20>;    /* J + K */
+      bindings = <&lang_toggle>;
+    };
+  };
+
+  /* ----- CONDITIONAL LAYERS (root-level) ----- */
+  conditional_layers {
+    compatible = "zmk,conditional-layers";
+
+    tri_layer {
+      if-layers = <LOWER RAISE>;
+      then-layer = <ADJUST>;
+    };
+  };
+
+  /* ----- KEYMAP ----- */
   keymap {
     compatible = "zmk,keymap";
 
-    /* ----- LAYERS ----- */
-
     base_layer {
       bindings = <
-        /* ┌──────────── Left ────────────┐   ┌─────────── Right ───────────┐ */
            &kp TAB   &kp Q     &kp W     &kp E     &kp R     &kp T        &kp Y     &kp U     &kp I     &kp O     &kp P     &kp BSPC
            &kp LCTRL &kp A     &kp S     &kp D     &kp F     &kp G        &kp H     &kp J     &kp K     &kp L     &kp SEMI  &kp SQT
            &kp LSHFT &kp Z     &kp X     &kp C     &kp V     &kp B        &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH  &kp ESC
@@ -74,38 +105,5 @@
                               &trans    &trans     &trans         &trans    &trans     &trans
       >;
     };
-
-    /* ----- CONDITIONAL (tri-layer) ----- */
-    conditional_layers {
-      compatible = "zmk,conditional-layers";
-      tri_layer {
-        if-layers = <LOWER RAISE>;
-        then-layer = <ADJUST>;
-      };
-    };
-
-    /* ----- COMBOS (аккорды) ----- */
-    combos {
-      compatible = "zmk,combos";
-
-      combo_esc_qw {
-        timeout-ms = <40>;
-        key-positions = <1 2>;      /* Q + W */
-        bindings = <&kp ESC>;
-      };
-
-      combo_caps_word_as {
-        timeout-ms = <40>;
-        key-positions = <13 14>;    /* A + S */
-        bindings = <&caps_word>;
-      };
-
-      combo_lang_jk {
-        timeout-ms = <45>;
-        key-positions = <19 20>;    /* J + K */
-        bindings = <&lang_toggle>;
-      };
-    };
   };
 };
-
