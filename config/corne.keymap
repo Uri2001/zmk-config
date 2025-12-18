@@ -13,13 +13,17 @@
 #define RAISE  2
 #define ADJUST 3
 
-&mt { quick-tap-ms = <80>;
-      tapping-term-ms = <140>;
-    };
+&mt {
+    quick-tap-ms = <80>;
+    tapping-term-ms = <140>;
+    flavor = "tap-preferred";
+};
 
-&lt { quick-tap-ms = <80>;
-      tapping-term-ms = <140>;
-    };
+&lt {
+    quick-tap-ms = <80>;
+    tapping-term-ms = <140>;
+    flavor = "tap-preferred";
+};
 
 / {
     /* ----- MACROS (root-level) ----- */
